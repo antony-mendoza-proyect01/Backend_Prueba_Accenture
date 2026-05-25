@@ -137,3 +137,13 @@ ion-checkbox {
     transform: scale(1);
   }
 }
+ion-button[size="small"] {
+  --border-radius: 10px;
+  height: 36px;
+  width: 36px;
+  margin-left: 6px;
+
+  ion-icon {
+    font-size: 18px;
+  }
+}

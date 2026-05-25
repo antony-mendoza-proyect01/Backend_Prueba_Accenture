@@ -7,8 +7,6 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-
-
   <div id="container">
 
     @if (showCategories) {
@@ -48,19 +46,17 @@
             @for (category of categories; track category.id) {
 
     <ion-item>
-
       <ion-label>
-        {{ category.name }}
+        <h2>{{ category.name }}</h2>
       </ion-label>
 
-      <!-- EDITAR -->
+      <ion-button fill="outline" size="small" color="warning" slot="end" (click)="editCategory(category)">
+        <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+      </ion-button>
 
-      <ion-button fill="clear" type="button" color="warning" slot="end" (click)="editCategory(category)">Editar</ion-button>
-
-      <!-- ELIMINAR -->
-
-      <ion-button fill="clear" color="danger" slot="end" (click)="deleteCategory(category.id)">Eliminar</ion-button>
-
+      <ion-button fill="outline" size="small" color="danger" slot="end" (click)="deleteCategory(category.id)">
+        <ion-icon slot="icon-only" name="trash-bin-outline"></ion-icon>
+      </ion-button>
     </ion-item>
 
     }
@@ -186,8 +182,10 @@
 
               }
             </ion-label>
-
-            <ion-button fill="clear" color="danger" size="small" (click)="deleteTask(task.id)">Eliminar</ion-button>
+            <ion-button fill="outline" size="small" color="danger" slot="end" (click)="deleteTask(task.id)">
+              <ion-icon slot="icon-only" name="trash-bin-outline"></ion-icon>
+            </ion-button>
+<!--            <ion-button fill="clear" color="danger" size="small" (click)="deleteTask(task.id)">Eliminar</ion-button>-->
           </ion-item>
         </ion-list>
       </ion-card-content>
