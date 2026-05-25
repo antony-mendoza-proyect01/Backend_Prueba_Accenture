@@ -16,6 +16,8 @@ import {
   closeCircleOutline
 } from 'ionicons/icons';
 import {SharedModule} from "../../shared/shared.module";
+import {SpinnerComponent} from "../../shared/spinner/spinner.component";
+import {SpinnerService} from "../../service/spinner.service";
 
 @Component({
   selector: 'app-home',
@@ -23,7 +25,7 @@ import {SharedModule} from "../../shared/shared.module";
   styleUrls: ['home.page.scss'],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SharedModule],
+  imports: [SharedModule, SpinnerComponent],
 })
 export class HomePage implements OnInit, OnDestroy {
   showCategories = false;
@@ -39,7 +41,7 @@ export class HomePage implements OnInit, OnDestroy {
     private categoryService: CategoryService,
     private alertCtrl: AlertController,
     private remoteConfig: RemoteconfigService,
-
+    private spinner: SpinnerService,
     private fb: FormBuilder,
     private cdr: ChangeDetectorRef
   ) {
@@ -55,20 +57,32 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    await this.remoteConfig.init();
-    this.showCategories = this.remoteConfig.showCategories;
+    this.spinner.show();
 
-    this.categoryService.categories$.pipe(takeUntil(this.destroy$)).subscribe(categories => {
-        this.categories = categories;
-        this.cdr.markForCheck();
-      });
+    try {
+      await this.remoteConfig.init();
+      this.showCategories = this.remoteConfig.showCategories;
 
-    await this.taskService.loadTasks();
-    this.taskService.tasks$.pipe(takeUntil(this.destroy$)).subscribe(tasks => {
-        this.tasks = tasks;
-        this.allTasks = tasks;
-        this.cdr.markForCheck();
-      });
+      this.categoryService.categories$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(categories => {
+          this.categories = categories;
+          this.cdr.markForCheck();
+        });
+
+      await this.taskService.loadTasks();
+
+      this.taskService.tasks$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(tasks => {
+          this.tasks = tasks;
+          this.allTasks = tasks;
+          this.cdr.markForCheck();
+        });
+
+    } finally {
+      this.spinner.hide();
+    }
   }
 
   ngOnDestroy() {
@@ -78,25 +92,46 @@ export class HomePage implements OnInit, OnDestroy {
 
   async addCategory() {
     if (this.categoryForm.invalid) return;
-    await this.categoryService.addCategory({
-      id: uuid(),
-      name: this.categoryForm.value.name
-    });
-    this.categoryForm.reset({ name: '' });
+
+    this.spinner.show();
+
+    try {
+      await this.categoryService.addCategory({
+        id: uuid(),
+        name: this.categoryForm.value.name
+      });
+
+      this.categoryForm.reset({ name: '' });
+
+    } catch (e) {
+      console.error(e);
+    } finally {
+      this.spinner.hide();
+    }
   }
 
   async addTask() {
     if (this.taskForm.invalid) return;
-    const form = this.taskForm.value;
-    const task: Task = {
-      id: uuid(),
-      title: form.title,
-      completed: false,
-      categoryId: form.categoryId || undefined,
-      createdAt: new Date()
-    };
-    await this.taskService.addTask(task);
-    this.taskForm.reset({ title: '', categoryId: '' });
+
+    this.spinner.show();
+
+    try {
+      const form = this.taskForm.value;
+
+      const task: Task = {
+        id: uuid(),
+        title: form.title,
+        completed: false,
+        categoryId: form.categoryId || undefined,
+        createdAt: new Date()
+      };
+
+      await this.taskService.addTask(task);
+      this.taskForm.reset({ title: '', categoryId: '' });
+
+    } finally {
+      this.spinner.hide();
+    }
   }
 
   trackByTaskId(index: number, task: any) {
@@ -117,13 +152,20 @@ export class HomePage implements OnInit, OnDestroy {
           text: 'Eliminar',
           role: 'destructive',
           handler: async () => {
-            await this.taskService.deleteTask(id);
-            await alert.dismiss();
-            return true;
+            this.spinner.show();
+
+            try {
+              await this.taskService.deleteTask(id);
+              await alert.dismiss();
+              return true;
+            } finally {
+              this.spinner.hide();
+            }
           }
         }
       ]
     });
+
     await alert.present();
   }
 
@@ -146,14 +188,21 @@ export class HomePage implements OnInit, OnDestroy {
           text: 'Eliminar',
           role: 'destructive',
           handler: async () => {
-            await this.taskService.deleteTasksByCategoryId(id);
-            await this.categoryService.deleteCategory(id);
-            await alert.dismiss();
-            return true;
+            this.spinner.show();
+
+            try {
+              await this.taskService.deleteTasksByCategoryId(id);
+              await this.categoryService.deleteCategory(id);
+              await alert.dismiss();
+              return true;
+            } finally {
+              this.spinner.hide();
+            }
           }
         }
       ]
     });
+
     await alert.present();
   }
 
@@ -174,13 +223,26 @@ export class HomePage implements OnInit, OnDestroy {
           text: 'Guardar',
           handler: async (data) => {
             if (!data.name.trim()) return false;
-            await this.categoryService.updateCategory({ ...category, name: data.name });
-            await alert.dismiss();
-            return true;
+
+            this.spinner.show();
+
+            try {
+              await this.categoryService.updateCategory({
+                ...category,
+                name: data.name
+              });
+
+              await alert.dismiss();
+              return true;
+
+            } finally {
+              this.spinner.hide();
+            }
           }
         }
       ]
     });
+
     await alert.present();
   }
 }
