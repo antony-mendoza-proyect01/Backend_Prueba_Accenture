@@ -70,7 +70,7 @@ export class HomePage implements OnInit, OnDestroy {
       title: ['', Validators.required],
       categoryId: ['']
     });
-    addIcons({ createOutline, trashBinOutline, checkmarkCircleOutline, closeCircleOutline });
+    addIcons({ createOutline, trashBinOutline, checkmarkCircleOutline, closeCircleOutline, });
 
   }
 

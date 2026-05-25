@@ -147,3 +147,51 @@ ion-button[size="small"] {
     font-size: 18px;
   }
 }
+.app-toolbar {
+  --background: linear-gradient(135deg, #3880ff, #4c8dff);
+  --color: white;
+  padding: 6px 0;
+}
+
+.app-title {
+  text-align: center;
+  font-weight: 700;
+}
+
+.title-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.2;
+}
+
+.main-title {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.subtitle {
+  font-size: 12px;
+  font-weight: 400;
+  opacity: 0.85;
+  margin-top: 2px;
+}
+
+/* opcional: efecto suave */
+.app-toolbar ion-title {
+  animation: fadeTitle .4s ease;
+}
+
+@keyframes fadeTitle {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
