@@ -1,15 +1,6 @@
 import { Component, OnDestroy, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Task } from '../../models/task';
-import { CommonModule } from '@angular/common';
-import {
-  IonHeader, IonToolbar, IonTitle, IonContent,
-  IonItem, IonInput, IonButton, IonIcon,
-  IonList, IonLabel, IonCheckbox,
-  IonSegment, IonSegmentButton,
-  IonCard, IonCardHeader, IonCardTitle, IonCardContent,
-  IonSelect, IonSelectOption, IonChip, IonRippleEffect
-} from '@ionic/angular/standalone';
 import { v4 as uuid } from 'uuid';
 import { TaskService } from '../../service/task.service';
 import { CategoryService } from '../../service/category.service';
@@ -24,6 +15,7 @@ import {
   checkmarkCircleOutline,
   closeCircleOutline
 } from 'ionicons/icons';
+import {SharedModule} from "../../shared/shared.module";
 
 @Component({
   selector: 'app-home',
@@ -31,27 +23,15 @@ import {
   styleUrls: ['home.page.scss'],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    IonHeader, IonToolbar, IonTitle, IonContent,
-    IonItem, IonInput, IonButton, IonIcon,
-    IonList, IonLabel, IonCheckbox,
-    IonSegment, IonSegmentButton,
-    IonCard, IonCardHeader, IonCardTitle, IonCardContent,
-    IonSelect, IonSelectOption, IonChip, IonRippleEffect
-  ],
+  imports: [SharedModule],
 })
 export class HomePage implements OnInit, OnDestroy {
-
   showCategories = false;
   categoryForm: FormGroup;
   taskForm: FormGroup;
   allTasks: any[] = [];
   tasks: any[] = [];
   categories: any[] = [];
-
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -78,16 +58,13 @@ export class HomePage implements OnInit, OnDestroy {
     await this.remoteConfig.init();
     this.showCategories = this.remoteConfig.showCategories;
 
-    this.categoryService.categories$.pipe(takeUntil(this.destroy$))
-      .subscribe(categories => {
+    this.categoryService.categories$.pipe(takeUntil(this.destroy$)).subscribe(categories => {
         this.categories = categories;
         this.cdr.markForCheck();
       });
 
     await this.taskService.loadTasks();
-    this.taskService.tasks$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(tasks => {
+    this.taskService.tasks$.pipe(takeUntil(this.destroy$)).subscribe(tasks => {
         this.tasks = tasks;
         this.allTasks = tasks;
         this.cdr.markForCheck();
@@ -124,10 +101,6 @@ export class HomePage implements OnInit, OnDestroy {
 
   trackByTaskId(index: number, task: any) {
     return task.id;
-  }
-
-  trackByCategoryId(index: number, cat: any) {
-    return cat.id;
   }
 
   async toggleTask(id: string) {

@@ -87,36 +87,25 @@
         <form [formGroup]="taskForm">
 
           <ion-item lines="full">
-
-            <ion-input
-              placeholder="Escribe una tarea..."
-              formControlName="title">
-
-            </ion-input>
-
+            <ion-input placeholder="Escribe una tarea..." formControlName="title"></ion-input>
           </ion-item>
 
           <ion-item lines="full">
-
             <ion-select placeholder="Selecciona categoría" formControlName="categoryId">
-
               <ion-select-option *ngFor="let category of categories" [value]="category.id">
                 {{ category.name }}
               </ion-select-option>
             </ion-select>
           </ion-item>
-          <ion-button expand="block"             color="secondary"
-                      class="btn ion-activatable ripple-parent" [disabled]="taskForm.invalid" (click)="addTask()">
+
+          <ion-button expand="block" color="secondary" class="btn ion-activatable ripple-parent" [disabled]="taskForm.invalid" (click)="addTask()">
             <ion-ripple-effect></ion-ripple-effect>
             Agregar tarea
           </ion-button>
         </form>
-
       </ion-card-content>
-
     </ion-card>
 
-    <!-- FILTRO -->
 
     <ion-card class="card">
 
@@ -125,30 +114,15 @@
       </ion-card-header>
 
       <ion-card-content>
-
-        <ion-select
-          placeholder="Ver por categoría"
-          (ionChange)="filterTasks($event.detail.value)">
-
-          <ion-select-option value="">
-            Todas
-          </ion-select-option>
-
-          <ion-select-option
-            *ngFor="let category of categories"
-            [value]="category.id">
-
+        <ion-select placeholder="Ver por categoría" (ionChange)="filterTasks($event.detail.value)">
+          <ion-select-option value="">Todas</ion-select-option>
+          <ion-select-option *ngFor="let category of categories" [value]="category.id">
             {{ category.name }}
-
           </ion-select-option>
-
         </ion-select>
-
       </ion-card-content>
-
     </ion-card>
 
-    <!-- LISTA TAREAS -->
 
     <ion-card class="card">
 
@@ -157,20 +131,11 @@
       </ion-card-header>
 
       <ion-card-content>
-
         <ion-list lines="none">
 
-          <ion-item
-            class="task-item"
-            [class.task-completed]="task.completed"
-            *ngFor="let task of tasks; trackBy: trackByTaskId">
+          <ion-item class="task-item" [class.task-completed]="task.completed" *ngFor="let task of tasks; trackBy: trackByTaskId">
 
-            <ion-checkbox
-              slot="start"
-              [checked]="task.completed"
-              (ionChange)="toggleTask(task.id)">
-
-            </ion-checkbox>
+            <ion-checkbox slot="start" [checked]="task.completed" (ionChange)="toggleTask(task.id)"></ion-checkbox>
 
             <ion-label>
               <h2 [class.done]="task.completed">
@@ -189,7 +154,6 @@
             <ion-button fill="outline" size="small" color="danger" slot="end" (click)="deleteTask(task.id)">
               <ion-icon slot="icon-only" name="trash-bin-outline"></ion-icon>
             </ion-button>
-<!--            <ion-button fill="clear" color="danger" size="small" (click)="deleteTask(task.id)">Eliminar</ion-button>-->
           </ion-item>
         </ion-list>
       </ion-card-content>
