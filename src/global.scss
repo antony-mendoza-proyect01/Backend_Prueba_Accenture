@@ -35,3 +35,288 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 //@import '@ionic/angular/css/palettes/dark.system.css';
+ion-content {
+  --background: linear-gradient(180deg, #f4f7ff 0%, #eef2ff 100%);
+}
+
+ion-toolbar {
+  --background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  --color: white;
+}
+
+ion-title {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: .8px;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.card {
+  border-radius: 28px;
+  margin-bottom: 22px;
+  padding: 4px;
+  background: rgba(255,255,255,0.82);
+  backdrop-filter: blur(14px);
+  box-shadow:
+    0 10px 35px rgba(79,70,229,0.12),
+    0 2px 10px rgba(0,0,0,0.05);
+  border: 1px solid rgba(255,255,255,0.7);
+  overflow: hidden;
+  transition: 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 16px 40px rgba(79,70,229,0.18),
+    0 4px 14px rgba(0,0,0,0.08);
+}
+
+ion-card-header {
+  padding-bottom: 8px;
+}
+
+ion-card-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e1b4b;
+}
+
+/* =========================
+   INPUTS
+========================= */
+
+ion-item {
+  --background: #ffffff;
+  --border-radius: 18px;
+  --padding-start: 14px;
+  --inner-padding-end: 14px;
+  margin-top: 12px;
+  border: 1px solid #e5e7eb;
+  transition: 0.2s ease;
+}
+
+ion-item:hover {
+  border-color: #7c3aed;
+  transform: scale(1.01);
+}
+
+ion-input,
+ion-select {
+  font-size: 15px;
+  font-weight: 500;
+  color: #111827;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.btn {
+  margin-top: 18px;
+  height: 52px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .4px;
+  --border-radius: 18px;
+  text-transform: none;
+  transition: 0.25s ease;
+}
+
+.btn:hover {
+  transform: scale(1.02);
+}
+
+/* =========================
+   TASKS
+========================= */
+
+.task-item {
+  --background: linear-gradient(135deg, #ffffff, #f8faff);
+  --padding-start: 14px;
+  --inner-padding-end: 10px;
+  margin-bottom: 14px;
+  border-radius: 20px;
+  min-height: 78px;
+  border: 1px solid #edf2ff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+  transition: .25s ease;
+}
+
+.task-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(79,70,229,0.10);
+}
+
+.task-item h2 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 4px;
+}
+
+.task-item p {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* =========================
+   TASK COMPLETED
+========================= */
+
+.done {
+  text-decoration: line-through;
+  opacity: .55;
+}
+
+/* =========================
+   CHECKBOX
+========================= */
+
+ion-checkbox {
+  --size: 24px;
+  --checkbox-background-checked: #7c3aed;
+  --border-color-checked: #7c3aed;
+  margin-right: 10px;
+}
+
+/* =========================
+   ACTION BUTTONS
+========================= */
+
+ion-button[color="danger"] {
+  --color: #ef4444;
+  font-weight: 600;
+}
+
+ion-button[color="warning"] {
+  --color: #f59e0b;
+  font-weight: 600;
+}
+
+/* =========================
+   LIST CATEGORY
+========================= */
+
+ion-list {
+  background: transparent;
+  margin-top: 16px;
+}
+
+ion-label {
+  font-weight: 600;
+}
+
+/* =========================
+   ANIMATION
+========================= */
+
+.card,
+.task-item,
+ion-item,
+ion-button {
+  animation: fadeIn .4s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (min-width: 768px) {
+
+  ion-content {
+    --padding-start: 80px;
+    --padding-end: 80px;
+  }
+
+  .card {
+    max-width: 850px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+/* =========================
+   FIX FONDOS NEGROS
+========================= */
+
+:root {
+  color-scheme: light;
+}
+
+ion-content {
+  --background: linear-gradient(180deg, #f4f7ff 0%, #eef2ff 100%);
+}
+
+/* CARD */
+
+ion-card,
+.card {
+  --background: rgba(255,255,255,0.95);
+  background: rgba(255,255,255,0.95);
+}
+
+/* ITEMS */
+
+ion-item {
+  --background: #ffffff;
+  background: #ffffff;
+  --color: #111827;
+  color: #111827;
+}
+
+/* LIST */
+
+ion-list {
+  background: transparent !important;
+}
+
+/* INPUT */
+
+ion-input,
+ion-select,
+ion-label,
+ion-card-title,
+ion-title {
+  color: #111827 !important;
+}
+
+/* SELECT DROPDOWN */
+
+ion-select::part(text) {
+  color: #111827;
+}
+
+/* TASK */
+
+.task-item {
+  --background: #ffffff;
+  background: #ffffff;
+}
+
+/* TOOLBAR */
+
+ion-toolbar {
+  --background: linear-gradient(135deg, #4f46e5, #7c3aed);
+}
+
+/* IOS FIX */
+
+.ios ion-modal,
+.md ion-modal {
+  --background: white;
+}

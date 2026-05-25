@@ -1,52 +1,196 @@
 <ion-header [translucent]="true">
-  <ion-toolbar color="primary">
-    <ion-title> Mi To-Do</ion-title>
+  <ion-toolbar>
+    <ion-title>
+      TO DO LIST
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="ion-padding">
 
-  <!-- Input para agregar tarea -->
-  <div class="input-container">
+
+  <div id="container">
+
+    @if (showCategories) {
+
+    <ion-card class="card">
+
+      <ion-card-header>
+        <ion-card-title>Categorías</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+
+        <form [formGroup]="categoryForm">
+
+          <ion-item lines="full">
+            <ion-input
+              placeholder="Nueva categoría"
+              formControlName="name">
+            </ion-input>
+          </ion-item>
+
+          <ion-button
+            expand="block"
+            color="secondary"
+            class="btn"
+            [disabled]="categoryForm.invalid"
+            (click)="addCategory()">
+
+            Crear categoría
+
+          </ion-button>
+
+          <!-- LISTA CATEGORÍAS -->
+
+          <ion-list>
+
+            @for (category of categories; track category.id) {
+
     <ion-item>
-      <ion-input
-        [(ngModel)]="nuevaTarea"
-        placeholder="Escribe una tarea..."
-        (keyup.enter)="agregarTarea()">
-      </ion-input>
-    </ion-item>
-    <ion-button expand="block" (click)="agregarTarea()" [disabled]="!nuevaTarea.trim()">
-      Agregar tarea
-    </ion-button>
-  </div>
 
-  <!-- Filtros -->
-  <ion-segment [(ngModel)]="filtro" (ionChange)="cambiarFiltro()">
-    <ion-segment-button value="todas">Todas</ion-segment-button>
-    <ion-segment-button value="pendientes">Pendientes</ion-segment-button>
-    <ion-segment-button value="completadas">Completadas</ion-segment-button>
-  </ion-segment>
-
-  <!-- Lista de tareas -->
-  <ion-list>
-    <ion-item *ngFor="let tarea of tareasFiltradas" [class.completada]="tarea.completada">
-      <ion-checkbox
-        slot="start"
-        [(ngModel)]="tarea.completada">
-      </ion-checkbox>
-      <ion-label [class.tachado]="tarea.completada">
-        {{ tarea.texto }}
+      <ion-label>
+        {{ category.name }}
       </ion-label>
-      <ion-button slot="end" fill="clear" color="danger" (click)="eliminarTarea(tarea)">
-        <ion-icon name="trash-outline"></ion-icon>
-      </ion-button>
+
+      <!-- EDITAR -->
+
+      <ion-button fill="clear" type="button" color="warning" slot="end" (click)="editCategory(category)">Editar</ion-button>
+
+      <!-- ELIMINAR -->
+
+      <ion-button fill="clear" color="danger" slot="end" (click)="deleteCategory(category.id)">Eliminar</ion-button>
+
     </ion-item>
-  </ion-list>
 
-  <!-- Mensaje si no hay tareas -->
-  <div class="empty" *ngIf="tareasFiltradas.length === 0">
-    <ion-icon name="checkmark-done-outline"></ion-icon>
-    <p>No hay tareas aquí</p>
+    }
+
+    </ion-list>
+
+  </form>
+
+</ion-card-content>
+
+</ion-card>
+
+    }
+
+    <!-- NUEVA TAREA -->
+
+    <ion-card class="card">
+
+      <ion-card-header>
+        <ion-card-title>Nueva tarea</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+
+        <form [formGroup]="taskForm">
+
+          <ion-item lines="full">
+
+            <ion-input
+              placeholder="Escribe una tarea..."
+              formControlName="title">
+
+            </ion-input>
+
+          </ion-item>
+
+          <ion-item lines="full">
+
+            <ion-select placeholder="Selecciona categoría" formControlName="categoryId">
+
+              <ion-select-option *ngFor="let category of categories" [value]="category.id">
+                {{ category.name }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-button expand="block" color="primary" class="btn ion-activatable ripple-parent" [disabled]="taskForm.invalid" (click)="addTask()">
+            <ion-ripple-effect></ion-ripple-effect>
+            Agregar tarea
+          </ion-button>
+        </form>
+
+      </ion-card-content>
+
+    </ion-card>
+
+    <!-- FILTRO -->
+
+    <ion-card class="card">
+
+      <ion-card-header>
+        <ion-card-title>Filtrar tareas</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+
+        <ion-select
+          placeholder="Ver por categoría"
+          (ionChange)="filterTasks($event.detail.value)">
+
+          <ion-select-option value="">
+            Todas
+          </ion-select-option>
+
+          <ion-select-option
+            *ngFor="let category of categories"
+            [value]="category.id">
+
+            {{ category.name }}
+
+          </ion-select-option>
+
+        </ion-select>
+
+      </ion-card-content>
+
+    </ion-card>
+
+    <!-- LISTA TAREAS -->
+
+    <ion-card class="card">
+
+      <ion-card-header>
+        <ion-card-title>Tareas</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+
+        <ion-list lines="none">
+
+          <ion-item
+            class="task-item"
+            [class.task-completed]="task.completed"
+            *ngFor="let task of tasks; trackBy: trackByTaskId">
+
+            <ion-checkbox
+              slot="start"
+              [checked]="task.completed"
+              (ionChange)="toggleTask(task.id)">
+
+            </ion-checkbox>
+
+            <ion-label>
+              <h2 [class.done]="task.completed">
+                {{ task.title }}
+              </h2>
+              <ion-chip color="primary" outline="true">
+                {{ getCategoryName(task.categoryId) }}
+              </ion-chip>
+              @if (task.completed) {
+              <div class="completed-badge">
+                Tarea completada
+              </div>
+
+              }
+            </ion-label>
+
+            <ion-button fill="clear" color="danger" size="small" (click)="deleteTask(task.id)">Eliminar</ion-button>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
   </div>
-
 </ion-content>

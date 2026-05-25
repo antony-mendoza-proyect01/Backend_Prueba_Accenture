@@ -33,3 +33,107 @@ ion-segment {
     font-size: 16px;
   }
 }
+.task-completed {
+  --background: linear-gradient(135deg, #dcfce7, #bbf7d0) !important;
+  border: 2px solid #22c55e;
+  transform: scale(0.98);
+  opacity: 0.95;
+}
+
+.task-completed h2 {
+  text-decoration: line-through;
+  color: #166534 !important;
+  font-weight: 700;
+}
+
+.task-completed ion-label {
+  opacity: 0.85;
+}
+
+.task-completed::after {
+  content: '✔ COMPLETADA';
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  background: #22c55e;
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 10px rgba(34,197,94,0.3);
+}
+
+/* ANIMACIÓN */
+
+.task-item {
+  position: relative;
+  overflow: hidden;
+  transition: all .3s ease;
+}
+
+.task-completed {
+  animation: completedAnimation .35s ease;
+}
+
+@keyframes completedAnimation {
+
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.03);
+  }
+
+  100% {
+    transform: scale(0.98);
+  }
+}
+
+/* CHECK */
+
+ion-checkbox {
+  --size: 28px;
+  --checkbox-background-checked: #22c55e;
+  --border-color-checked: #22c55e;
+}
+/* =========================
+   COMPLETED BADGE
+========================= */
+
+.completed-badge {
+  margin-top: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  box-shadow: 0 6px 14px rgba(34,197,94,0.35);
+  animation: popCompleted .35s ease;
+}
+
+/* ANIMACIÓN */
+
+@keyframes popCompleted {
+
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+
+  70% {
+    transform: scale(1.08);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
