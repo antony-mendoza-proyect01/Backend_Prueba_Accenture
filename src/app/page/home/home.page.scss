@@ -148,7 +148,7 @@ ion-button[size="small"] {
   }
 }
 .app-toolbar {
-  --background: linear-gradient(135deg, #3880ff, #4c8dff);
+  --background: linear-gradient(135deg, #1e3a8a, #2563eb);
   --color: white;
   padding: 6px 0;
 }
@@ -170,6 +170,7 @@ ion-button[size="small"] {
   font-size: 20px;
   font-weight: 800;
   letter-spacing: 1px;
+  color: white;
   text-transform: uppercase;
 }
 
@@ -177,6 +178,7 @@ ion-button[size="small"] {
   font-size: 12px;
   font-weight: 400;
   opacity: 0.85;
+  color: white;
   margin-top: 2px;
 }
 
